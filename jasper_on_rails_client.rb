@@ -2,6 +2,8 @@ require 'net/http'
 
 class JasperOnRailsClient
 
+  attr_reader :report_data
+
   def initialize(server, port)
     @server, @port = server, port
   end
@@ -17,8 +19,12 @@ class JasperOnRailsClient
       end
     end
     get.form_data = {:dados => data}.merge(params)
-    http.request(get)
+    @report_data = http.request(get).read_body
+    self
   end
 
+  def save_to_file(file_name)
+    File.open(file_name) {|file| file.print @report_data }
+  end
 end
 
