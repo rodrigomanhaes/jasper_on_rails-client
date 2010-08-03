@@ -11,7 +11,7 @@ class JasperOnRailsClient
   def request_report(options)
     data, report, format = options[:data], options[:report], options[:format]
     http = Net::HTTP.new(@server, @port)
-    get = Net::HTTP::Get.new("/relatorio/#{report}.#{format}", nil)
+    get = Net::HTTP::Get.new(URI.escape("/relatorio/#{report}.#{format}"), nil)
     params = {}
     if options[:params]
       options[:params].each_pair do |param_name, param_value|
@@ -24,7 +24,7 @@ class JasperOnRailsClient
   end
 
   def save_to_file(file_name)
-    File.open(file_name) {|file| file.print @report_data }
+    File.open(file_name, "w") {|file| file.print @report_data }
   end
 end
 
